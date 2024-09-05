@@ -55,14 +55,9 @@ class PostgresDB:
         except psycopg2.Error as e:
             print(f"Error inserting data: {e}")
     
-    def select_data(self, table, columns='*', condition=None):
+    def select_data(self, query):
         """Select data from a table."""
         try:
-            query = sql.SQL("SELECT {columns} FROM {table} {condition}").format(
-                columns=sql.SQL(', ').join(map(sql.Identifier, columns)) if columns != '*' else sql.SQL('*'),
-                table=sql.Identifier(table),
-                condition=sql.SQL(condition) if condition else sql.SQL('')
-            )
             self.cursor.execute(query)
             return self.cursor.fetchall()
         except psycopg2.Error as e:
@@ -93,8 +88,3 @@ class PostgresDB:
             self.connection.commit()
         except psycopg2.Error as e:
             print(f"Error deleting data: {e}")
-
-pgcx = PostgresDB()
-pgcx.connect()
-print(pgcx.select_data("parking_spots"))
-pgcx.close()
