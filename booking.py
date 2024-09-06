@@ -16,6 +16,4 @@ def add_parking_spot(info: ParkingSpotBooking):
     columns = ["name", "latitude", "longitude", "days_available"]  # add support for other fields in table then add here
     values = [info.name, info.email, info.latitude, info.longitude, info.days_available]
     pgcx = PostgresDB()
-    pgcx.connect()
     pgcx.insert_data(table=table, coluns=columns, values=values)
-    pgcx.close()

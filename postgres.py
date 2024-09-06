@@ -10,6 +10,7 @@ class PostgresDB:
         self.port = port
         self.connection = None
         self.cursor = None
+        self.connect()
     
     def connect(self):
         """Establish a connection to the database."""
@@ -55,11 +56,14 @@ class PostgresDB:
         except psycopg2.Error as e:
             print(f"Error inserting data: {e}")
     
-    def select_data(self, query):
-        """Select data from a table."""
+    def query(self, query):
+        """Select data from a table and return a list of dictionaries."""
         try:
             self.cursor.execute(query)
-            return self.cursor.fetchall()
+            columns = [desc[0] for desc in self.cursor.description]  # Get column names
+            rows = self.cursor.fetchall()
+            result = [dict(zip(columns, row)) for row in rows]  # Combine columns with row data
+            return result
         except psycopg2.Error as e:
             print(f"Error fetching data: {e}")
             return None
@@ -88,3 +92,6 @@ class PostgresDB:
             self.connection.commit()
         except psycopg2.Error as e:
             print(f"Error deleting data: {e}")
+    
+    def __del__(self):
+        self.close()
