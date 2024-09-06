@@ -8,7 +8,7 @@ class MapRequest(BaseModel):
     latitude: float
     radius: float
 
-class ParkingSpot(BaseModel):
+class ParkingSpotMap(BaseModel):
     account: str
     longitude: float
     latitude: float
@@ -16,7 +16,7 @@ class ParkingSpot(BaseModel):
     price: float
 
 class MapResponse(BaseModel):
-    spots: List[ParkingSpot]
+    spots: List[ParkingSpotMap]
 
 def get_bounding_box(latitude_in_degrees, longitude_in_degrees, radius_km):
     lat = math.radians(latitude_in_degrees)
@@ -55,7 +55,7 @@ def find_spots(longitude: float, latitude: float, radius: float):
     
     for entry in result:
         resulting_spots.append(
-            ParkingSpot(
+            ParkingSpotMap(
                 account=entry[0],
                 longitude=entry[3],
                 latitude=entry[2],
